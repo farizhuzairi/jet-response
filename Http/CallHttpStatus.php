@@ -104,7 +104,6 @@ trait CallHttpStatus
                 break;
         }
 
-        // result
         if($statusCode > 0){
             $data = $arguments['data'] ?? [];
             return new static(
@@ -117,7 +116,6 @@ trait CallHttpStatus
         throw new InvalidResponse("Permintaan tidak valid #code {$statusCode}, #method {$method}");
         // throw new \Exception("Error Processing Request: Permintaan tidak valid #code {$statusCode}, #method {$method}");
         
-        // optional
         return null;
     }
 }

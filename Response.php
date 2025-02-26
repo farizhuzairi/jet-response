@@ -26,11 +26,6 @@ abstract class Response
         protected string $message = ""
     )
     {
-        /**
-         * set successful
-         * menyetel status respon berdasarkan kode status
-         * 
-         */
         $this->setStatusResponse($statusCode);
     }
 
@@ -121,24 +116,11 @@ abstract class Response
      */
     public function send(): JsonResponse
     {
-        /**
-         * menyiapkan sumber daya
-         * Resource::class
-         * 
-         */
         $this->makeResource();
 
-        /**
-         * mengembalikan nilai json
-         * 
-         */
         $result = $this->resource->response()
         ->setStatusCode($this->statusCode);
 
-        /**
-         * menambahkan header kustom
-         * 
-         */
         $result = $this->makeHeaders($result);
 
         // result
