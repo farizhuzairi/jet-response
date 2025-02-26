@@ -1,0 +1,43 @@
+{
+    "name": "farizhuzairi/jet-response",
+    "type": "library",
+    "description": "Laravel based Rest-Api connection response.",
+    "keywords": [
+        "jet response",
+        "rest-api",
+        "laravel response"
+    ],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/farizhuzairi/jet-response/issues",
+        "source": "https://github.com/farizhuzairi/jet-response"
+    },
+    "authors": [
+        {
+            "name": "Fariz Huzairi",
+            "email": "farizhuzairi@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "league/commonmark": "^2.6@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "orchestra/testbench": "^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "JetResponse\\": ""
+        }
+    },
+    
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JetResponse\\JetServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}
