@@ -19,11 +19,9 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "league/commonmark": "^2.6@dev"
+        "php": "^8.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.0",
         "orchestra/testbench": "^9.3"
     },
     "autoload": {
