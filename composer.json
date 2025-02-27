@@ -26,7 +26,7 @@
     },
     "autoload": {
         "files": [
-            "helper/defineErrorResponse.php"
+            "helper/jethelper.php"
         ],
         "psr-4": {
             "JetResponse\\": ""

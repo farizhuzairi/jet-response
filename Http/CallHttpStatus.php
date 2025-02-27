@@ -19,17 +19,11 @@ trait CallHttpStatus
             return stripos($value, "#{$keyword}#") !== false;
         }));
 
-        throw new InvalidResponse(...defineErrorResponse("Invalid request status code XXX with method XXX", __CLASS__, __LINE__, 500));
-        try {
-            throw new InvalidResponse(...defineErrorResponse("Invalid request status code XXX with method XXX", __CLASS__, __LINE__, 500));
-        } catch (\Throwable $th) {
-            report($th);
-        }
-
         if(isset($result[0])) {
             $result = constant("\JetResponse\Http\HttpStatus::{$result[0]}");
         }
         else{
+            report(new InvalidResponse(...defineErrorResponse("{$keyword} is not available in HttpStatus enum.", __CLASS__, __LINE__, 500)));
             $result = null;
         }
 
