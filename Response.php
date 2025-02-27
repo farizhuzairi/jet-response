@@ -82,6 +82,28 @@ abstract class Response
     }
 
     /**
+     * Set message data response
+     * 
+     * @return static
+     */
+    public function setMessage(string $message): static
+    {
+        $this->message = (string) $message;
+        return $this;
+    }
+
+    /**
+     * Set http header
+     * 
+     * @return static
+     */
+    public function setHeaders(array $headers): static
+    {
+        $this->headers = (array) $headers;
+        return $this;
+    }
+
+    /**
      * Mengembalikan objek Response
      * 
      * @return \Symfony\Component\HttpFoundation\Response
@@ -94,7 +116,7 @@ abstract class Response
             'successful' => $this->successful,
             'statusCode' => $this->statusCode,
             'message' => $this->message,
-            'data' => $this->data
+            'results' => $this->data
         ])
         ->setStatusCode($this->statusCode);
 

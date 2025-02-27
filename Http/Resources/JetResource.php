@@ -12,6 +12,7 @@ class JetResource extends ResourceCollection
         protected bool $successful = false,
         protected int $statusCode = 0,
         protected string $message = "",
+        protected array $meta = [],
     )
     {}
     
@@ -21,7 +22,14 @@ class JetResource extends ResourceCollection
             'successful' => $this->successful,
             'statusCode' => $this->statusCode,
             'message' => $this->message,
-            'data' => $this->data
+            'results' => $this->data
         ];
+    }
+
+    public function with(Request $request): array
+    {
+        $meta = [];
+
+        return array_merge($this->meta, $meta);
     }
 }

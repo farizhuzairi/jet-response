@@ -4,6 +4,7 @@ namespace JetResponse;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class JetServiceProvider extends ServiceProvider
 {
@@ -14,6 +15,6 @@ class JetServiceProvider extends ServiceProvider
     
     public function boot(): void
     {
-        //
+        JsonResource::withoutWrapping();
     }
 }
