@@ -25,6 +25,9 @@
         "orchestra/testbench": "^9.3"
     },
     "autoload": {
+        "files": [
+            "helper/defineErrorResponse.php"
+        ],
         "psr-4": {
             "JetResponse\\": ""
         }
@@ -37,5 +40,5 @@
             ]
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }

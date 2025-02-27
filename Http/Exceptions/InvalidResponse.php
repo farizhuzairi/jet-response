@@ -3,27 +3,23 @@
 namespace JetResponse\Http\Exceptions;
 
 use Exception;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
 
 class InvalidResponse extends Exception
 {
     public function __construct(
         string $message = '',
-        int $code = 502,
-        protected bool $isRender = true
+        int $code = 0,
+        protected array $error = []
     )
     {
-        $msg = "Invalid Response.";
+        $msg = "Invalid Jet Response.";
         $message = !empty($message) ? "{$msg} {$message}" : $msg;
         parent::__construct($message, $code);
     }
 
-    public function render(Request $request): Response|bool
+    public function report(): void
     {
-        if($request->routeIs('api.*')) {
-            return Jet::badGateway()->json();
-        }
-        return false;
+        Log::info($this->message, array_merge($this->error, ['code' => $this->code]));
     }
 }
