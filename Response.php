@@ -18,6 +18,7 @@ abstract class Response
      */
     protected JetResource $resource;
     protected array $headers = [];
+    protected array $meta = [];
     protected bool $successful = false;
     
     public function __construct(
@@ -100,6 +101,53 @@ abstract class Response
     public function setHeaders(array $headers): static
     {
         $this->headers = (array) $headers;
+        return $this;
+    }
+
+    /**
+     * Add http header
+     * 
+     * @return static
+     */
+    public function addHeader(array|string $headers, array|string|null $value = null): static
+    {
+        if(is_array($headers)) {
+            $this->headers = array_merge($this->headers, $headers);
+        }
+
+        elseif(is_string($headers) && ! empty($value)) {
+            $this->headers[$headers] = $value;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set Metadata
+     * 
+     * @return static
+     */
+    public function setMeta(array $meta): static
+    {
+        $this->meta = (array) $meta;
+        return $this;
+    }
+
+    /**
+     * Add Metadata
+     * 
+     * @return static
+     */
+    public function addMeta(array|string $meta, array|string|null $value): static
+    {
+        if(is_array($meta)) {
+            $this->meta = array_merge($this->meta, $meta);
+        }
+
+        elseif(is_string($meta) && !empty($value)) {
+            $this->meta[$meta] = $value;
+        }
+
         return $this;
     }
 
