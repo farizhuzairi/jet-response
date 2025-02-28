@@ -6,7 +6,8 @@ if(! function_exists('defineErrorResponse')){
         string $message,
         string $class,
         string $line,
-        int $code = 0
+        int $code = 0,
+        bool $isRendered = false,
     ): array {
 
         return [
@@ -16,6 +17,7 @@ if(! function_exists('defineErrorResponse')){
                 "class" => $class,
                 "line" => $line,
             ],
+            "isRendered" => $isRendered,
         ];
 
     }

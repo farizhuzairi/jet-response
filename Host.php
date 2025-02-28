@@ -1,10 +1,10 @@
 <?php
 
-namespace JetResponse;
+namespace Jet\Response;
 
-use JetResponse\Response;
+use Jet\Response\ResponseService;
 
-class Jet extends Response
+class Host extends ResponseService
 {
     public function __construct(
         array|string|null $data = [],

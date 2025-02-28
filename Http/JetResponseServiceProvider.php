@@ -1,18 +1,18 @@
 <?php
 
-namespace JetResponse;
+namespace Jet\Response\Http;
 
-use JetResponse\Jet;
+use Jet\Response\Host;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\JsonResource;
 // use Illuminate\Contracts\Foundation\Application;
 
-class JetServiceProvider extends ServiceProvider
+class JetResponseServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
         \Illuminate\Http\Request::macro('baseTheme', function() {
-            return new Jet();
+            return new Host();
         });
     }
     

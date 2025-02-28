@@ -29,14 +29,14 @@
             "helper/jethelper.php"
         ],
         "psr-4": {
-            "JetResponse\\": ""
+            "Jet\\Response\\": ""
         }
     },
     
     "extra": {
         "laravel": {
             "providers": [
-                "JetResponse\\JetServiceProvider"
+                "Jet\\Response\\Http\\JetResponseServiceProvider"
             ]
         }
     },

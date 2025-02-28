@@ -1,6 +1,6 @@
 <?php
 
-namespace JetResponse\Http\Resources;
+namespace Jet\Response\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -28,8 +28,6 @@ class JetResource extends ResourceCollection
 
     public function with(Request $request): array
     {
-        $meta = [];
-
-        return array_merge($this->meta, $meta);
+        return $this->meta;
     }
 }

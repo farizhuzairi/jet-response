@@ -1,13 +1,13 @@
 <?php
 
-namespace JetResponse;
+namespace Jet\Response;
 
-use JetResponse\Http\CallHttpStatus;
+use Jet\Response\Http\CallHttpStatus;
 use Illuminate\Http\JsonResponse;
-use JetResponse\Http\Resources\JetResource;
+use Jet\Response\Http\Resources\JetResource;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 
-abstract class Response
+abstract class ResponseService
 {
     use CallHttpStatus;
 
@@ -152,6 +152,24 @@ abstract class Response
     }
 
     /**
+     * add Data
+     * 
+     * @return static
+     */
+    public function addData(array|string $data, array|string|null $value = null): static
+    {
+        if(is_array($data)) {
+            $this->data = array_merge($this->data, $data);
+        }
+
+        elseif(is_string($data) && !empty($value)) {
+            $this->data[$data] = $value;
+        }
+
+        return $this;
+    }
+
+    /**
      * Mengembalikan objek Response
      * 
      * @return \Symfony\Component\HttpFoundation\Response
@@ -159,7 +177,7 @@ abstract class Response
     public function json(): BaseResponse
     {
         $this->setStatusResponse($this->statusCode);
-
+        
         $result = response()->json([
             'successful' => $this->successful,
             'statusCode' => $this->statusCode,
@@ -168,10 +186,7 @@ abstract class Response
         ])
         ->setStatusCode($this->statusCode);
 
-        $result = $this->makeHeaders($result);
-
-        // result
-        return $result;
+        return $this->makeHeaders($result);
     }
 
     /**
@@ -191,9 +206,6 @@ abstract class Response
         $result = $this->resource->response()
         ->setStatusCode($this->statusCode);
 
-        $result = $this->makeHeaders($result);
-
-        // result
-        return $result;
+        return $this->makeHeaders($result);
     }
 }

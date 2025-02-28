@@ -10,4 +10,3 @@ testbench.yaml
 .phpunit.cache
 tests
 phpunit.xml
-error.md

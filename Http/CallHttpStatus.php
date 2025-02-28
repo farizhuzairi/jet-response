@@ -1,35 +1,17 @@
 <?php
 
-namespace JetResponse\Http;
+namespace Jet\Response\Http;
 
-use JetResponse\Http\HttpStatus;
-use JetResponse\Http\Exceptions\InvalidResponse;
+use Jet\Response\Http\HttpStatus;
+use Jet\Response\Http\Exceptions\InvalidResponse;
 
 trait CallHttpStatus
 {
     /**
-     * Get Http Status Object
+     * Set http status with static method
      * 
-     * @return \JetResponse\Http\HttpStatus|null
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response|null
      */
-    private static function getHttpStatusObject(?string $keyword): ?HttpStatus
-    {
-        $httpStatus = HttpStatus::data();
-        $result = array_keys(array_filter($httpStatus, function ($value) use ($keyword) {
-            return stripos($value, "#{$keyword}#") !== false;
-        }));
-
-        if(isset($result[0])) {
-            $result = constant("\JetResponse\Http\HttpStatus::{$result[0]}");
-        }
-        else{
-            report(new InvalidResponse(...defineErrorResponse("{$keyword} is not available in HttpStatus enum.", __CLASS__, __LINE__, 500)));
-            $result = null;
-        }
-
-        return $result;
-    }
-
     public static function __callStatic(string $method, array $arguments)
     {
         $statusCode = 0;
@@ -41,14 +23,13 @@ trait CallHttpStatus
             return $i;
         };
 
-        $httpStatus = static::getHttpStatusObject($method);
+        $httpStatus = HttpStatus::getObjectByKeyword($method);
         if($httpStatus) {
             $statusCode = $httpStatus->code();
             $message = $arguments['message'] ?? $httpStatus->message();
         }
 
-        if($statusCode > 0 || empty($httpStatus)){
-
+        if($statusCode > 0 || ! $httpStatus){
             $data = $arguments['data'] ?? [];
             $error = HttpStatus::ERROR;
             return new static(
@@ -58,6 +39,7 @@ trait CallHttpStatus
             );
         }
         
+        report(new InvalidResponse(...defineErrorResponse("Invalid Http status method.", __CLASS__, __LINE__, 500)));
         return null;
     }
 }
