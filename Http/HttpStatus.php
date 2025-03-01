@@ -45,7 +45,7 @@ enum HttpStatus : string
      * 
      * @return \Jet\Response\Http\HttpStatus|null
      */
-    public static function getObjectByKeyword(?string $keyword): ?HttpStatus
+    public static function getObjectByKeyword(string|int|null $keyword): ?HttpStatus
     {
         $httpStatus = static::data();
         $result = array_keys(array_filter($httpStatus, function ($value) use ($keyword) {
