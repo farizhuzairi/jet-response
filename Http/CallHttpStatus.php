@@ -3,6 +3,7 @@
 namespace Jet\Response\Http;
 
 use Jet\Response\Http\HttpStatus;
+use Illuminate\Support\Facades\Log;
 use Jet\Response\Http\Exceptions\InvalidResponse;
 
 trait CallHttpStatus
@@ -15,16 +16,17 @@ trait CallHttpStatus
     public static function __callStatic(string $method, array $arguments)
     {
         $statusCode = 0;
-        $message = $arguments['message'] ?? null;
+        $message = isset($arguments['message']) ? $arguments['message'] : ( isset($arguments[0]) ? $arguments[0] : null );
+        $withDefault = isset($arguments['withDefault']) ? $arguments['withDefault'] : ( isset($arguments[1]) ? $arguments[1] : false );
 
-        $msg = function(?string $defaultMessage, ?string $message){
+        $msg = function(?string $defaultMessage, ?string $message, bool $withDefault = false){
             $i = $defaultMessage;
-            if(!empty($message)) $i = "{$i} {$message}";
+            if(! empty($message)) $i = $withDefault ? "{$i} {$message}" : "{$message}";
             return $i;
         };
 
         $httpStatus = HttpStatus::getObjectByKeyword($method);
-        if($statusCode > 0 || ! $httpStatus){
+        if(! $httpStatus){
             Log::warning("{$method} does not match any http status codes");
             $httpStatus = HttpStatus::ERROR;
         }
@@ -32,10 +34,7 @@ trait CallHttpStatus
         return new static(
             data: $arguments['data'] ?? [],
             statusCode: $httpStatus->code(),
-            message: $msg($message, $httpStatus->message())
+            message: $msg($httpStatus->message(), $message, $withDefault)
         );
-        
-        report(new InvalidResponse(...defineErrorResponse("Invalid Http status method.", __CLASS__, __LINE__, 500)));
-        return null;
     }
 }

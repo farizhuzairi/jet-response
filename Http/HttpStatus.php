@@ -21,6 +21,7 @@ enum HttpStatus : string
     case TIMEOUT = "408#timeout#Too many requests failed to process.";
     case REQUEST_TIMEOUT = "408#requestTimeout#Too many requests failed to process.";
     case CONFLICT = "409#conflict#Request not recognized.";
+    case UNPROCESSABLE  = "422#unprocessable#Unprocessable Content.";
     case TOO_MANY_REQUEST = "429#tooManyRequest#The request exceeds the specified limit.";
     case MANY_REQUEST = "429#manyRequest#The request exceeds the specified limit.";
     case SERVER_ERROR = "500#serverError#There was a problem with the internal server.";
