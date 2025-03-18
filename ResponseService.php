@@ -37,12 +37,13 @@ abstract class ResponseService
      */
     protected function makeResource(): void
     {
-        $this->resource = new JetResource(
+        $this->resource = (new JetResource(
             data: $this->data,
             successful: $this->successful,
             statusCode: $this->statusCode,
-            message: $this->message
-        );
+            message: $this->message,
+            meta: $this->meta
+        ));
     }
 
     /**
@@ -178,11 +179,13 @@ abstract class ResponseService
     {
         $this->setStatusResponse($this->statusCode);
         
-        $result = response()->json([
+        $result = response()
+        ->json([
             'successful' => $this->successful,
             'statusCode' => $this->statusCode,
             'message' => $this->message,
-            'results' => $this->data
+            'results' => $this->data,
+            'meta' => $this->meta
         ])
         ->setStatusCode($this->statusCode);
 
@@ -203,8 +206,16 @@ abstract class ResponseService
     {
         $this->makeResource();
 
-        $result = $this->resource->response()
-        ->setStatusCode($this->statusCode);
+        $result = $this->resource;
+
+        // if($this->meta) {
+        //     $result = $result
+        //     ->additional($this->meta);
+        // }
+
+        $result = $result
+            ->response()
+            ->setStatusCode($this->statusCode);
 
         return $this->makeHeaders($result);
     }

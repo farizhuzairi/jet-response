@@ -28,6 +28,8 @@ class JetResource extends ResourceCollection
 
     public function with(Request $request): array
     {
-        return $this->meta;
+        return [
+            'meta' => $this->meta
+        ];
     }
 }

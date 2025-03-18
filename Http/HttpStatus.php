@@ -12,21 +12,21 @@ enum HttpStatus : string
     case MOVED_PERMANENTLY = "301#movedPermanently#The resource URL is not available.";
     case MOVED = "301#moved#The resource URL is not available.";
     case FOUND = "302#found#The resource is not available at this time.";
-    case BAD_REQUEST = "400#badRequest#Access not found.";
-    case INVALID_TOKEN = "401#invalidToken#Token missing or invalid key.";
-    case UNAUTHORIZED = "401#unauthorized#Requires authentication.";
+    case BAD_REQUEST = "400#badRequest#Bad Request. Data not found.";
+    case INVALID_TOKEN = "401#invalidToken#Unauthorized. Token missing or invalid key.";
+    case UNAUTHORIZED = "401#unauthorized#Unauthorized. Requires authentication.";
     case PAYMENT_REQUIRED = "402#paymentRequired#Payment required.";
-    case FORBIDDEN = "403#forbidden#Invalid access.";
+    case FORBIDDEN = "403#forbidden#Forbidden. Access not permitted.";
     case NOTFOUND = "404#notFound#Access or data not found.";
-    case TIMEOUT = "408#timeout#Too many requests failed to process.";
-    case REQUEST_TIMEOUT = "408#requestTimeout#Too many requests failed to process.";
+    case TIMEOUT = "408#timeout#Request Timeout. Too many requests failed to process.";
+    case REQUEST_TIMEOUT = "408#requestTimeout#Request Timeout. Too many requests failed to process.";
     case CONFLICT = "409#conflict#Request not recognized.";
     case UNPROCESSABLE  = "422#unprocessable#Unprocessable Content.";
-    case TOO_MANY_REQUEST = "429#tooManyRequest#The request exceeds the specified limit.";
-    case MANY_REQUEST = "429#manyRequest#The request exceeds the specified limit.";
-    case SERVER_ERROR = "500#serverError#There was a problem with the internal server.";
-    case ERROR = "500#error#There was a problem with the internal server.";
-    case BAD_GATEWAY = "502#badGateway#An error occurred on the server.";
+    case TOO_MANY_REQUEST = "429#tooManyRequest#Too Many Request. The request exceeds the specified limit.";
+    case MANY_REQUEST = "429#manyRequest#Too Many Request. The request exceeds the specified limit.";
+    case SERVER_ERROR = "500#serverError#Server Error. There was a problem with the internal server.";
+    case ERROR = "500#error#Server Error. There was a problem with the internal server.";
+    case BAD_GATEWAY = "502#badGateway#Bad Gateway. An error occurred on the server.";
 
     /**
      * Data to Array
