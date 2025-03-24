@@ -19,6 +19,7 @@ abstract class ResponseService
     protected JetResource $resource;
     protected array $headers = [];
     protected array $meta = [];
+    protected array $author = [];
     protected bool $successful = false;
     
     public function __construct(
@@ -181,11 +182,14 @@ abstract class ResponseService
         
         $result = response()
         ->json([
-            'successful' => $this->successful,
-            'statusCode' => $this->statusCode,
-            'message' => $this->message,
-            'results' => $this->data,
-            'meta' => $this->meta
+            'data' => [
+                'successful' => $this->successful,
+                'statusCode' => $this->statusCode,
+                'message' => $this->message,
+                'results' => $this->data,
+            ],
+            'meta' => $this->meta,
+            'author' => $this->author // is included while the value is empty by default
         ])
         ->setStatusCode($this->statusCode);
 
@@ -208,10 +212,8 @@ abstract class ResponseService
 
         $result = $this->resource;
 
-        // if($this->meta) {
-        //     $result = $result
-        //     ->additional($this->meta);
-        // }
+        $result = $result
+        ->additional(['author' => $this->author]); // is included while the value is empty by default
 
         $result = $result
             ->response()

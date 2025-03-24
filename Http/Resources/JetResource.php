@@ -28,8 +28,12 @@ class JetResource extends ResourceCollection
 
     public function with(Request $request): array
     {
-        return [
+        if(array_key_exists('meta', $this->with)) {
+            return array_merge($this->with, $this->meta);
+        }
+
+        return array_merge($this->with, [
             'meta' => $this->meta
-        ];
+        ]);
     }
 }
