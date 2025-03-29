@@ -2,7 +2,8 @@
 
 namespace Jet\Response;
 
-use Jet\Response\ResponseService;
+use Illuminate\Http\JsonResponse;
+use Jet\Response\Http\Contracts\ResponseService;
 
 class Host extends ResponseService
 {
@@ -25,8 +26,19 @@ class Host extends ResponseService
         array|string|null $data,
         int $statusCode,
         string $message
-    ): static
+    ): JsonResponse
     {
-        return new static($data, $statusCode, $message);
+        $host = new static($data, $statusCode, $message);
+        return $host->send();
+    }
+
+    /**
+     * Set http status with static method
+     * 
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response|null
+     */
+    public static function __callStatic(string $method, array $arguments)
+    {
+        return parent::__callStatic($method, $arguments);
     }
 }

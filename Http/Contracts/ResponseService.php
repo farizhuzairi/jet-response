@@ -1,17 +1,15 @@
 <?php
 
-namespace Jet\Response;
+namespace Jet\Response\Http\Contracts;
 
 use Illuminate\Http\JsonResponse;
-use Jet\Response\Http\CallHttpStatus;
+use Jet\Response\Http\HttpStatus;
 use Jet\Response\Http\Resources\JetResource;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 
 abstract class ResponseService
 {
-    use CallHttpStatus;
-
-    protected JetResource $resource;
+    protected JetResource $resourceCollection;
     protected array $headers = [];
     protected array $meta = [];
     protected array $author = [];
@@ -22,24 +20,34 @@ abstract class ResponseService
         protected int $statusCode = 0,
         protected string $message = ""
     )
-    {
-        $this->setStatusResponse($statusCode);
-    }
+    {}
 
     protected function makeResource(): void
     {
-        $this->resource = (new JetResource(
+        $this->setStatusResponse($this->statusCode);
+        $this->setMessageResponse($this->statusCode, $this->message);
+
+        $this->resourceCollection = (new JetResource(
             data: $this->data,
             successful: $this->successful,
             statusCode: $this->statusCode,
             message: $this->message,
             meta: $this->meta
         ));
+
+        $this->resourceCollection
+        ->additional(['author' => $this->author]);
     }
 
-    protected function setStatusResponse(int $statusCode = 0): void
+    protected function setStatusResponse(int $statusCode): void
     {
         $this->successful = $statusCode >= 200 && $statusCode <= 299 ? true : false;
+    }
+
+    protected function setMessageResponse(int $statusCode, string $message): void
+    {
+        $result = HttpStatus::getObjectByKeyword($statusCode);
+        $this->message = "{$result->message()} {$message}";
     }
 
     public function setStatusCode(int $statusCode): static
@@ -49,7 +57,7 @@ abstract class ResponseService
         return $this;
     }
 
-    protected function makeHeaders(JsonResponse|BaseResponse $result): JsonResponse|BaseResponse
+    protected function responseWithHeader(JsonResponse|BaseResponse $result): JsonResponse|BaseResponse
     {
         if(!empty($this->headers)){
             foreach($this->headers as $key => $value){
@@ -124,35 +132,52 @@ abstract class ResponseService
 
     public function json(): BaseResponse
     {
-        $this->setStatusResponse($this->statusCode);
+        $this->makeResource();
         
         $result = response()
-        ->json([
-            'data' => [
-                'successful' => $this->successful,
-                'statusCode' => $this->statusCode,
-                'message' => $this->message,
-                'results' => $this->data,
-            ],
-            'meta' => $this->meta,
-            'author' => $this->author
-        ])
+        ->json($this->resourceCollection)
         ->setStatusCode($this->statusCode);
 
-        return $this->makeHeaders($result);
+        return $this->responseWithHeader($result);
     }
 
     public function send(): JsonResponse
     {
         $this->makeResource();
 
-        $result = $this->resource
-        ->additional(['author' => $this->author]);
-
-        $result = $result
+        $result = $this->resourceCollection
             ->response()
             ->setStatusCode($this->statusCode);
 
-        return $this->makeHeaders($result);
+        return $this->responseWithHeader($result);
+    }
+
+    /**
+     * Set http status with static method
+     * 
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response|null
+     */
+    public static function __callStatic(string $method, array $arguments)
+    {
+        $message = isset($arguments['message']) ? $arguments['message'] : ( isset($arguments[0]) ? $arguments[0] : null );
+        $withDefault = isset($arguments['withDefault']) ? $arguments['withDefault'] : ( isset($arguments[1]) ? $arguments[1] : false );
+
+        $msg = function(?string $defaultMessage, ?string $message, bool $withDefault = false){
+            $i = $defaultMessage;
+            if(! empty($message)) $i = $withDefault ? "{$i} {$message}" : "{$message}";
+            return $i;
+        };
+
+        $httpStatus = HttpStatus::getObjectByKeyword($method);
+        if(! $httpStatus){
+            \Illuminate\Support\Facades\Log::warning("{$method} does not match any http status codes");
+            $httpStatus = HttpStatus::ERROR;
+        }
+        
+        return new static(
+            data: $arguments['data'] ?? [],
+            statusCode: $httpStatus->code(),
+            message: $msg($httpStatus->message(), $message, $withDefault)
+        );
     }
 }
