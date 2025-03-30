@@ -31,14 +31,4 @@ class Host extends ResponseService
         $host = new static($data, $statusCode, $message);
         return $host->send();
     }
-
-    /**
-     * Set http status with static method
-     * 
-     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response|null
-     */
-    public static function __callStatic(string $method, array $arguments)
-    {
-        return parent::__callStatic($method, $arguments);
-    }
 }
