@@ -20,7 +20,7 @@ class Host extends ResponseService
      * Objek respon default berdasarkan parameter
      * menggunakan static method
      * 
-     * @return static
+     * @return \Illuminate\Http\JsonResponse
      */
     public static function make(
         array|string|null $data,
