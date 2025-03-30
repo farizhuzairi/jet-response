@@ -11,21 +11,40 @@ use Symfony\Component\HttpFoundation\Response;
 
 class InvalidResponse extends Exception
 {
+    protected array $error = [];
+
     public function __construct(
         string $message = '',
-        int $code = 0,
-        protected array $error = [],
+        array|int $code = 0,
+        array $error = [],
         protected bool $isRendered = false
     )
     {
-        $msg = "Invalid Jet Response.";
-        $message = !empty($message) ? "{$msg} {$message}" : $msg;
+        if(is_array($code)) {
+            $error = $code;
+            $code = 0;
+        }
+
+        $this->error = $error;
+
+        $msg = $this->use_log_message();
+        $message = !empty($message) ? $message : $msg;
         parent::__construct($message, $code);
     }
 
     public function report(): void
     {
-        Log::info($this->message, array_merge($this->error, ['code_fromObject' => $this->code]));
+        $level = $this->use_log_level();
+
+        Log::{$level}($this->message, array_merge(
+            $this->error,
+            [
+                'message' => $this->getMessage(),
+                'code' => $this->getCode(),
+                'file' => $this->getFile(),
+                'line' => $this->getLine(),
+            ]
+        ));
     }
 
     public function render(Request $request): Response|bool
@@ -51,13 +70,34 @@ class InvalidResponse extends Exception
 
             return Host::make(
                 data: [],
-                statusCode: $httpStatus->code() ?? 500,
-                message: $httpStatus->message() ?? "",
+                statusCode: $httpStatus?->code() ?? 500,
+                message: $httpStatus?->message(),
             )
             ->send();
 
         }
 
         return false;
+    }
+
+    protected function use_log_level(): string
+    {
+        $s = 'logLevelDefault';
+        if(property_exists($this, $s)) {
+            return $this->{$s};
+        }
+
+        return 'error';
+    }
+
+    protected function use_log_message(): string
+    {
+        $s = 'logMessageDefault';
+        if(property_exists($this, $s)) {
+            return $this->{$s};
+        }
+        
+
+        return 'Error system.';
     }
 }

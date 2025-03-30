@@ -57,7 +57,7 @@ enum HttpStatus : string
             $result = constant("\Jet\Response\Http\HttpStatus::{$result[0]}");
         }
         else{
-            report(new InvalidResponse(...defineErrorResponse("{$keyword} is not available in HttpStatus enum.", __CLASS__, __LINE__, 500)));
+            report(new InvalidResponse(...defineErrorResponse("{$keyword} is not available in HttpStatus enum.", 500)));
             $result = null;
         }
 

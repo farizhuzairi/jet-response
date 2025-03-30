@@ -18,7 +18,7 @@ abstract class ResponseService
     public function __construct(
         protected array|string|null $data = [],
         protected int $statusCode = 0,
-        protected string $message = ""
+        protected ?string $message = ""
     )
     {}
 

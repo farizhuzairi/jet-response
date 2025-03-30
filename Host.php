@@ -25,7 +25,7 @@ class Host extends ResponseService
     public static function make(
         array|string|null $data,
         int $statusCode,
-        string $message
+        ?string $message
     ): JsonResponse
     {
         $host = new static($data, $statusCode, $message);
