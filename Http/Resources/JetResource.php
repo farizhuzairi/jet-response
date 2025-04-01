@@ -21,7 +21,7 @@ class JetResource extends ResourceCollection
         return [
             'successful' => $this->successful,
             'statusCode' => $this->statusCode,
-            'message' => $this->message,
+            'message' => trim($this->message),
             'results' => $this->data
         ];
     }
