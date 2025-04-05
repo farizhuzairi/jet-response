@@ -98,7 +98,7 @@ abstract class ResponseService
         return $this;
     }
 
-    public function addMeta(array|string $meta, array|string|null $value): static
+    public function addMeta(array|string $meta, array|string|null $value = null): static
     {
         if(is_array($meta)) {
             $this->meta = array_merge($this->meta, $meta);
