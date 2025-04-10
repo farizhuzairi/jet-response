@@ -134,9 +134,9 @@ abstract class ResponseService
     {
         $this->makeResource();
         
-        $result = response()
-        ->json($this->resourceCollection)
-        ->setStatusCode($this->statusCode);
+        $result = $this->resourceCollection
+            ->response()
+            ->setStatusCode($this->statusCode);
 
         return $this->responseWithHeader($result);
     }
